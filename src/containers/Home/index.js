@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { getHomeList } from './store/actions'
 
 /**
  * 同构： 一套React代码，在服务器端执行一次，在浏览器端在执行一下
@@ -8,18 +9,34 @@ import { connect } from 'react-redux'
  * 同构运用时 服务器端渲染只发生在你访问的第一个页面
  */
 
-
-const Home = (props) => {
-    return (
-        <>
-            <div>I am {props.name}</div>
-            <button onClick={ () => { alert('aaaa') } }>click</button>
-        </>
-    )
+class Home extends Component {
+    getList() {
+        const { list } = this.props
+        return list.map(item => <div key={item.id}>{ item.title }</div>)
+    }
+    render() {
+        return (
+            <>
+                <div>I am {this.props.name}</div>
+                { this.getList() }
+                <button onClick={ () => { alert('aaaa') } }>click</button>
+            </>
+        )
+    }
+    componentDidMount() {
+        this.props.getHomelist()
+    }
 }
 
 const  mapStatetToProps = state => ({
-    name: state.name
+    list: state.home.newLists,
+    name: state.home.name
 })
 
-export default connect(mapStatetToProps, null)(Home)
+const mapDispatchToProps = dispatch => ({
+    getHomelist() {
+        dispatch(getHomeList())
+    }
+})
+
+export default connect(mapStatetToProps, mapDispatchToProps)(Home)
