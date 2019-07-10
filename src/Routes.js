@@ -9,7 +9,7 @@ export default [
         component: Home,
         exact: true,
         loadData: Home.loadData,
-        key: 'home'
+        key: 'home',
     },
     {
         path: '/login',
